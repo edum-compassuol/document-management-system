@@ -7,49 +7,49 @@ import { listDocuments } from '../services/documentApi.js';
 const MESSAGE_COLORS = { success: '#1a7f37', error: '#b42318' };
 
 export default function DocumentsPage() {
-  const [documents, setDocuments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState(null);
+    const [documents, setDocuments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [message, setMessage] = useState(null);
 
-  const refresh = useCallback(async () => {
-    setLoading(true);
+    const refresh = useCallback(async () => {
+        setLoading(true);
 
-    try {
-      setDocuments(await listDocuments());
-    } catch (error) {
-      setMessage({ type: 'error', text: error.message });
-    } finally {
-      setLoading(false);
+        try {
+            setDocuments(await listDocuments());
+        } catch (error) {
+            setMessage({ type: 'error', text: error.message });
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        refresh();
+    }, [refresh]);
+
+    function handleUploaded(document) {
+        setMessage({ type: 'success', text: `"${document.originalName}" enviado com sucesso.` });
+        refresh();
     }
-  }, []);
 
-  useEffect(() => {
-    refresh();
-  }, [refresh]);
+    function handleError(text) {
+        setMessage({ type: 'error', text });
+    }
 
-  function handleUploaded(document) {
-    setMessage({ type: 'success', text: `"${document.originalName}" enviado com sucesso.` });
-    refresh();
-  }
+    return (
+        <main style={{ fontFamily: 'system-ui, sans-serif', padding: '2rem' }}>
+            <h1>Document Management System</h1>
 
-  function handleError(text) {
-    setMessage({ type: 'error', text });
-  }
+            <UploadComponent onUploaded={handleUploaded} onError={handleError} />
 
-  return (
-    <main style={{ fontFamily: 'system-ui, sans-serif', padding: '2rem' }}>
-      <h1>Document Management System</h1>
+            {message && (
+                <p role="status" style={{ color: MESSAGE_COLORS[message.type] }}>
+                    {message.text}
+                </p>
+            )}
 
-      <UploadComponent onUploaded={handleUploaded} onError={handleError} />
-
-      {message && (
-        <p role="status" style={{ color: MESSAGE_COLORS[message.type] }}>
-          {message.text}
-        </p>
-      )}
-
-      <h2>Documentos</h2>
-      <DocumentList documents={documents} loading={loading} />
-    </main>
-  );
+            <h2>Documentos</h2>
+            <DocumentList documents={documents} loading={loading} />
+        </main>
+    );
 }
