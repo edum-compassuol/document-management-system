@@ -7,7 +7,10 @@ agent: agent
 
 # Scaffold de camada do backend
 
-Crie a estrutura completa de uma camada para o recurso `${input:recurso:nome do recurso}` seguindo a Clean Architecture simples do projeto.
+Crie a estrutura completa de uma camada para o recurso `${input:recurso:nome do recurso}`
+seguindo a Clean Architecture simples do projeto.
+
+## Passos
 
 Gere os arquivos em `backend/src`:
 
@@ -16,7 +19,7 @@ Gere os arquivos em `backend/src`:
 3. `services/${input:recurso}.service.js` - concentra as regras de negócio.
 4. `repositories/${input:recurso}.repository.js` - cuida da persistência.
 
-Requisitos:
+## Requisitos
 
 - Respeite o fluxo `routes -> controllers -> services -> repositories`.
 - Uploads gravados no filesystem local via multer com diskStorage.
